@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Tiferet.Avalonia.Agents.Domain;
+using Tiferet.Avalonia.Agents.Interfaces;
 using Tiferet.Avalonia.Contexts;
 
 namespace Tiferet.Avalonia.Agents.Contexts;
@@ -11,10 +13,13 @@ namespace Tiferet.Avalonia.Agents.Contexts;
 // ** context: chat_view_model
 /// <summary>
 /// ViewModel for the main chat panel.
-/// Manages the message collection, user input, and send command.
+/// Manages the message collection, user input, streaming, and send command.
 /// </summary>
 public partial class ChatViewModel : ViewModelBase
 {
+    // * attribute: chat_service
+    private readonly IAgentChatService? _chatService;
+
     // * attribute: messages
     /// <summary>Observable collection of chat messages displayed in the conversation.</summary>
     public ObservableCollection<ChatMessage> Messages { get; } = [];
@@ -25,6 +30,7 @@ public partial class ChatViewModel : ViewModelBase
 
     // * attribute: is_sending
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
     private bool _isSending;
 
     // * attribute: conversation_id
@@ -39,14 +45,23 @@ public partial class ChatViewModel : ViewModelBase
     [ObservableProperty]
     private string _agentName = "Agent";
 
+    // * init
+    /// <summary>
+    /// Initializes the ChatViewModel.
+    /// </summary>
+    /// <param name="chatService">Optional chat service for streaming. Null for design-time.</param>
+    public ChatViewModel(IAgentChatService? chatService = null)
+    {
+        _chatService = chatService;
+    }
+
     // * method: send_message
     /// <summary>
-    /// Send a user message and add it to the conversation.
-    /// In this static prototype, adds a hardcoded AI echo response.
-    /// Will be wired to IAgentChatService in Milestone 2.
+    /// Send a user message, then stream the AI response token-by-token.
+    /// Falls back to echo mode when no IAgentChatService is available.
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanSend))]
-    private void SendMessage(string text)
+    private async Task SendMessageAsync(string text)
     {
         if (string.IsNullOrWhiteSpace(text)) return;
 
@@ -62,17 +77,58 @@ public partial class ChatViewModel : ViewModelBase
             Content = text,
         });
 
-        // Static prototype: add a placeholder AI response.
-        Messages.Add(new ChatMessage
+        // Clear the input and mark as sending.
+        CurrentInput = string.Empty;
+        IsSending = true;
+
+        // Create a placeholder AI message for streaming.
+        var aiMessage = new ChatMessage
         {
             Id = Guid.NewGuid().ToString(),
             ConversationId = ConversationId,
             Role = "ai",
-            Content = $"Echo: {text}",
-        });
+            Content = string.Empty,
+            IsStreaming = true,
+        };
+        Messages.Add(aiMessage);
 
-        // Clear the input.
-        CurrentInput = string.Empty;
+        try
+        {
+            if (_chatService is not null)
+            {
+                // Stream tokens from the service.
+                await foreach (var token in _chatService.StreamMessageAsync(
+                    AgentId ?? "default", text, ConversationId))
+                {
+                    aiMessage.Content += token.Content;
+
+                    // Notify the UI of the content change.
+                    var index = Messages.IndexOf(aiMessage);
+                    if (index >= 0)
+                    {
+                        Messages[index] = aiMessage;
+                    }
+                }
+            }
+            else
+            {
+                // Fallback echo mode (no service).
+                aiMessage.Content = $"Echo: {text}";
+                var index = Messages.IndexOf(aiMessage);
+                if (index >= 0)
+                    Messages[index] = aiMessage;
+            }
+        }
+        finally
+        {
+            // Mark streaming complete.
+            aiMessage.IsStreaming = false;
+            var finalIndex = Messages.IndexOf(aiMessage);
+            if (finalIndex >= 0)
+                Messages[finalIndex] = aiMessage;
+
+            IsSending = false;
+        }
     }
 
     // * method: can_send
