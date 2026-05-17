@@ -7,9 +7,7 @@
              x:DataType="ctx:ChatViewModel">
 
   <UserControl.Styles>
-    <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/ChatBubble.axaml" />
-    <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/MessageInput.axaml" />
-    <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/ToolCallCard.axaml" />
+    <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Styles/AgentTheme.axaml" />
   </UserControl.Styles>
 
   <DockPanel>
