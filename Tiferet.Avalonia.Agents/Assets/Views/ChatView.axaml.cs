@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace Tiferet.Avalonia.Agents.Views;
+namespace Tiferet.Avalonia.Agents.Assets.Views;
 
 // *** views
 

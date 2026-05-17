@@ -1,33 +1,32 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:views="using:Tiferet.Avalonia.Agents.Views"
-        x:Class="Tiferet.Avalonia.Agents.Views.AgentWindow"
+        xmlns:views="using:Tiferet.Avalonia.Agents.Assets.Views"
+        x:Class="Tiferet.Avalonia.Agents.Assets.Views.AgentWindow"
         Title="Tiferet Agent"
         Width="960" Height="680"
         MinWidth="640" MinHeight="480">
 
   <Grid ColumnDefinitions="260,*">
 
-    <!-- Left sidebar (placeholder for Milestone 4) -->
+    <!-- Left sidebar: conversation list and agent selection -->
     <Border Grid.Column="0"
             Background="#F5F5F5"
             BorderBrush="#E0E0E0"
             BorderThickness="0,0,1,0">
-      <StackPanel Margin="16,16" Spacing="12">
-        <TextBlock Text="Conversations"
+      <DockPanel>
+        <TextBlock DockPanel.Dock="Top"
+                   Text="Conversations"
                    FontSize="16"
                    FontWeight="SemiBold"
-                   Foreground="#424242" />
-        <TextBlock Text="No conversations yet."
-                   FontSize="12"
-                   Foreground="#9E9E9E"
-                   FontStyle="Italic" />
-      </StackPanel>
+                   Foreground="#424242"
+                   Margin="12,12,12,0" />
+        <views:ConversationListView Name="ConversationList" />
+      </DockPanel>
     </Border>
 
     <!-- Main chat panel -->
     <views:ChatView Grid.Column="1"
-                    DataContext="{Binding ChatViewModel}" />
+                    Name="ChatPanel" />
 
   </Grid>
 

@@ -1,0 +1,87 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctx="using:Tiferet.Avalonia.Agents.Contexts"
+             xmlns:domain="using:Tiferet.Avalonia.Agents.Domain"
+             x:Class="Tiferet.Avalonia.Agents.Assets.Views.ConversationListView"
+             x:DataType="ctx:ConversationListViewModel">
+
+  <DockPanel>
+
+    <!-- Agent selector and new conversation button (top) -->
+    <StackPanel DockPanel.Dock="Top"
+                Margin="12,12,12,0"
+                Spacing="8">
+
+      <!-- Agent dropdown -->
+      <ComboBox ItemsSource="{Binding Agents}"
+                SelectedItem="{Binding SelectedAgent}"
+                PlaceholderText="All Agents"
+                HorizontalAlignment="Stretch">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="domain:AgentInfo">
+            <TextBlock Text="{Binding Name}" />
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+
+      <!-- New conversation button -->
+      <Button Command="{Binding NewConversationCommand}"
+              HorizontalAlignment="Stretch"
+              HorizontalContentAlignment="Center"
+              Padding="8,6">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="+" FontWeight="Bold" FontSize="14" />
+          <TextBlock Text="New Conversation" FontSize="13" />
+        </StackPanel>
+      </Button>
+
+    </StackPanel>
+
+    <!-- Loading indicator -->
+    <ProgressBar DockPanel.Dock="Top"
+                 IsIndeterminate="True"
+                 IsVisible="{Binding IsLoading}"
+                 Margin="12,8,12,0"
+                 Height="2" />
+
+    <!-- Conversation list -->
+    <ListBox ItemsSource="{Binding Conversations}"
+             SelectedItem="{Binding SelectedConversation}"
+             Margin="0,8,0,0"
+             Background="Transparent"
+             BorderThickness="0">
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="domain:ConversationInfo">
+          <Border Padding="12,8"
+                  Background="Transparent"
+                  CornerRadius="4">
+            <Border.ContextMenu>
+              <ContextMenu>
+                <MenuItem Header="Delete"
+                          Command="{Binding $parent[ListBox].((ctx:ConversationListViewModel)DataContext).DeleteConversationCommand}"
+                          CommandParameter="{Binding Id}" />
+              </ContextMenu>
+            </Border.ContextMenu>
+            <StackPanel Spacing="2">
+              <!-- Conversation title -->
+              <TextBlock Text="{Binding Title}"
+                         FontSize="13"
+                         FontWeight="SemiBold"
+                         Foreground="#212121"
+                         TextTrimming="CharacterEllipsis"
+                         MaxLines="1" />
+              <!-- Updated timestamp -->
+              <TextBlock Text="{Binding UpdatedAt}"
+                         FontSize="11"
+                         Foreground="#9E9E9E"
+                         TextTrimming="CharacterEllipsis"
+                         MaxLines="1" />
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+
+  </DockPanel>
+
+</UserControl>
