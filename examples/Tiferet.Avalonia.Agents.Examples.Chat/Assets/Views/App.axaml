@@ -1,0 +1,8 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Tiferet.Avalonia.Agents.Examples.Chat.App">
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Styles/AgentTheme.axaml" />
+  </Application.Styles>
+</Application>
