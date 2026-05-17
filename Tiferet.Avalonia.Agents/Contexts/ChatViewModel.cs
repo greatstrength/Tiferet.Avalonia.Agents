@@ -213,6 +213,35 @@ public partial class ChatViewModel : ViewModelBase
     private bool CanSend(string text)
         => !IsSending && !string.IsNullOrWhiteSpace(text);
 
+    // * method: load_conversation
+    /// <summary>
+    /// Load a conversation into the chat panel, resetting current state.
+    /// Sets the conversation ID, agent ID, and agent name from the provided info.
+    /// </summary>
+    /// <param name="conversation">The conversation to load.</param>
+    /// <param name="agentName">Display name for the agent. Defaults to "Agent".</param>
+    public void LoadConversation(ConversationInfo conversation, string agentName = "Agent")
+    {
+        ClearMessages();
+        ConversationId = conversation.Id;
+        AgentId = conversation.AgentId;
+        AgentName = agentName;
+    }
+
+    // * method: clear_messages
+    /// <summary>
+    /// Clear all messages and pending approvals, resetting the conversation state.
+    /// </summary>
+    public void ClearMessages()
+    {
+        Messages.Clear();
+        PendingApprovals.Clear();
+        ConversationId = null;
+        AgentId = null;
+        AgentName = "Agent";
+        CurrentInput = string.Empty;
+    }
+
     // * method: load_design_time_messages
     /// <summary>
     /// Populate the message list with sample data for design-time preview.

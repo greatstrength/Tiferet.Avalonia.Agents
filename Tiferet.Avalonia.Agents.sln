@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiferet.Avalonia.Agents", "Tiferet.Avalonia.Agents\Tiferet.Avalonia.Agents.csproj", "{B59345AD-DB97-4513-9E0B-CFFDF1D848D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiferet.Avalonia.Agents.Tests", "Tiferet.Avalonia.Agents.Tests\Tiferet.Avalonia.Agents.Tests.csproj", "{7CD8C5A0-FA69-4326-B18C-FC4970105F14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{B59345AD-DB97-4513-9E0B-CFFDF1D848D4}.Release|x64.Build.0 = Release|Any CPU
 		{B59345AD-DB97-4513-9E0B-CFFDF1D848D4}.Release|x86.ActiveCfg = Release|Any CPU
 		{B59345AD-DB97-4513-9E0B-CFFDF1D848D4}.Release|x86.Build.0 = Release|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Debug|x64.Build.0 = Debug|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Debug|x86.Build.0 = Debug|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Release|x64.ActiveCfg = Release|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Release|x64.Build.0 = Release|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Release|x86.ActiveCfg = Release|Any CPU
+		{7CD8C5A0-FA69-4326-B18C-FC4970105F14}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

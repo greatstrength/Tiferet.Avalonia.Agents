@@ -3,7 +3,7 @@
              xmlns:ctx="using:Tiferet.Avalonia.Agents.Contexts"
              xmlns:domain="using:Tiferet.Avalonia.Agents.Domain"
              xmlns:controls="using:Tiferet.Avalonia.Agents.Assets.Controls"
-             x:Class="Tiferet.Avalonia.Agents.Views.ChatView"
+             x:Class="Tiferet.Avalonia.Agents.Assets.Views.ChatView"
              x:DataType="ctx:ChatViewModel">
 
   <UserControl.Styles>
