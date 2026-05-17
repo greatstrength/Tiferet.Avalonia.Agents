@@ -1,0 +1,108 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Tiferet.Avalonia.Agents.Assets.Controls">
+
+  <!-- ToolCallCard default template -->
+  <Style Selector="controls|ToolCallCard">
+    <Setter Property="Margin" Value="8,4" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="MaxWidth" Value="500" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border CornerRadius="8"
+                Padding="12"
+                Background="#FFF3E0"
+                BorderBrush="#FFB74D"
+                BorderThickness="1"
+                Name="CardBorder">
+          <StackPanel Spacing="8">
+            <!-- Tool name header -->
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <TextBlock Text="🔧"
+                         FontSize="14"
+                         VerticalAlignment="Center" />
+              <TextBlock Text="{TemplateBinding ToolName}"
+                         FontSize="14"
+                         FontWeight="SemiBold"
+                         Foreground="#E65100" />
+            </StackPanel>
+
+            <!-- Arguments (monospaced) -->
+            <Border Background="#FFF8E1"
+                    CornerRadius="4"
+                    Padding="8,6">
+              <TextBlock Text="{TemplateBinding Arguments}"
+                         FontFamily="Cascadia Mono, Consolas, monospace"
+                         FontSize="11"
+                         TextWrapping="Wrap"
+                         Foreground="#424242" />
+            </Border>
+
+            <!-- Action buttons -->
+            <StackPanel Name="PART_ActionButtons"
+                        Orientation="Horizontal"
+                        Spacing="8"
+                        HorizontalAlignment="Right">
+              <Button Name="PART_ApproveButton"
+                      Content="✓ Approve"
+                      Command="{TemplateBinding ApproveCommand}"
+                      CommandParameter="{TemplateBinding ToolCallId}"
+                      Padding="12,6"
+                      FontSize="12" />
+              <Button Name="PART_DenyButton"
+                      Content="✗ Deny"
+                      Command="{TemplateBinding DenyCommand}"
+                      CommandParameter="{TemplateBinding ToolCallId}"
+                      Padding="12,6"
+                      FontSize="12" />
+            </StackPanel>
+
+            <!-- Status label (hidden when pending) -->
+            <TextBlock Name="PART_StatusLabel"
+                       FontSize="12"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Right"
+                       IsVisible="False" />
+          </StackPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <!-- Pending: show buttons, hide status -->
+  <Style Selector="controls|ToolCallCard:pending /template/ StackPanel#PART_ActionButtons">
+    <Setter Property="IsVisible" Value="True" />
+  </Style>
+  <Style Selector="controls|ToolCallCard:pending /template/ TextBlock#PART_StatusLabel">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+
+  <!-- Approved: hide buttons, show green status -->
+  <Style Selector="controls|ToolCallCard:approved /template/ StackPanel#PART_ActionButtons">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="controls|ToolCallCard:approved /template/ TextBlock#PART_StatusLabel">
+    <Setter Property="IsVisible" Value="True" />
+    <Setter Property="Text" Value="✓ Approved" />
+    <Setter Property="Foreground" Value="#2E7D32" />
+  </Style>
+  <Style Selector="controls|ToolCallCard:approved /template/ Border#CardBorder">
+    <Setter Property="Background" Value="#E8F5E9" />
+    <Setter Property="BorderBrush" Value="#81C784" />
+  </Style>
+
+  <!-- Denied: hide buttons, show red status -->
+  <Style Selector="controls|ToolCallCard:denied /template/ StackPanel#PART_ActionButtons">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
+  <Style Selector="controls|ToolCallCard:denied /template/ TextBlock#PART_StatusLabel">
+    <Setter Property="IsVisible" Value="True" />
+    <Setter Property="Text" Value="✗ Denied" />
+    <Setter Property="Foreground" Value="#C62828" />
+  </Style>
+  <Style Selector="controls|ToolCallCard:denied /template/ Border#CardBorder">
+    <Setter Property="Background" Value="#FFEBEE" />
+    <Setter Property="BorderBrush" Value="#EF9A9A" />
+  </Style>
+
+</Styles>
