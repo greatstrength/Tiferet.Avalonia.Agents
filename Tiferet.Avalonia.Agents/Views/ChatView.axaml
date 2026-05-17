@@ -9,6 +9,7 @@
   <UserControl.Styles>
     <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/ChatBubble.axaml" />
     <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/MessageInput.axaml" />
+    <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/ToolCallCard.axaml" />
   </UserControl.Styles>
 
   <DockPanel>
@@ -33,15 +34,32 @@
     <ScrollViewer Name="MessageScrollViewer"
                   VerticalScrollBarVisibility="Auto"
                   Padding="8">
-      <ItemsControl ItemsSource="{Binding Messages}">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate x:DataType="domain:ChatMessage">
-            <controls:ChatBubble Role="{Binding Role}"
-                                 Content="{Binding Content}"
-                                 IsStreaming="{Binding IsStreaming}" />
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
+      <StackPanel Spacing="0">
+        <!-- Chat messages -->
+        <ItemsControl ItemsSource="{Binding Messages}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="domain:ChatMessage">
+              <controls:ChatBubble Role="{Binding Role}"
+                                   Content="{Binding Content}"
+                                   IsStreaming="{Binding IsStreaming}" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Pending tool approval cards -->
+        <ItemsControl ItemsSource="{Binding PendingApprovals}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="ctx:ToolApprovalViewModel">
+              <controls:ToolCallCard ToolName="{Binding ToolCall.Name}"
+                                     Arguments="{Binding ToolCall.Arguments}"
+                                     ToolCallId="{Binding ToolCall.Id}"
+                                     Status="{Binding Status}"
+                                     ApproveCommand="{Binding ApproveCommand}"
+                                     DenyCommand="{Binding DenyCommand}" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
     </ScrollViewer>
   </DockPanel>
 

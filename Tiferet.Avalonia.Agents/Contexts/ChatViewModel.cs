@@ -20,9 +20,16 @@ public partial class ChatViewModel : ViewModelBase
     // * attribute: chat_service
     private readonly IAgentChatService? _chatService;
 
+    // * attribute: approval_service
+    private readonly IToolApprovalService? _approvalService;
+
     // * attribute: messages
     /// <summary>Observable collection of chat messages displayed in the conversation.</summary>
     public ObservableCollection<ChatMessage> Messages { get; } = [];
+
+    // * attribute: pending_approvals
+    /// <summary>Active tool approval view models keyed by tool call ID.</summary>
+    public ObservableCollection<ToolApprovalViewModel> PendingApprovals { get; } = [];
 
     // * attribute: current_input
     [ObservableProperty]
@@ -50,9 +57,13 @@ public partial class ChatViewModel : ViewModelBase
     /// Initializes the ChatViewModel.
     /// </summary>
     /// <param name="chatService">Optional chat service for streaming. Null for design-time.</param>
-    public ChatViewModel(IAgentChatService? chatService = null)
+    /// <param name="approvalService">Optional tool approval service. Null for design-time.</param>
+    public ChatViewModel(
+        IAgentChatService? chatService = null,
+        IToolApprovalService? approvalService = null)
     {
         _chatService = chatService;
+        _approvalService = approvalService;
     }
 
     // * method: send_message
@@ -127,8 +138,75 @@ public partial class ChatViewModel : ViewModelBase
             if (finalIndex >= 0)
                 Messages[finalIndex] = aiMessage;
 
+            // Check for tool calls requiring approval.
+            if (aiMessage.ToolCalls.Count > 0)
+            {
+                foreach (var toolCall in aiMessage.ToolCalls.Where(tc => tc.RequiresApproval))
+                {
+                    var approval = new ToolApprovalViewModel(
+                        toolCall,
+                        AgentId ?? "default",
+                        ConversationId ?? string.Empty,
+                        _approvalService);
+
+                    // Subscribe to status changes to insert result messages.
+                    approval.PropertyChanged += async (sender, args) =>
+                    {
+                        if (args.PropertyName != nameof(ToolApprovalViewModel.Status)) return;
+                        if (sender is not ToolApprovalViewModel vm) return;
+                        await HandleToolApprovalResultAsync(vm);
+                    };
+
+                    PendingApprovals.Add(approval);
+                }
+            }
+
             IsSending = false;
         }
+    }
+
+    // * method: handle_tool_approval_result
+    /// <summary>
+    /// Insert a tool result or denial message after an approval decision.
+    /// </summary>
+    private async Task HandleToolApprovalResultAsync(ToolApprovalViewModel approval)
+    {
+        if (approval.Status == "approved")
+        {
+            // Wait for the result message to arrive.
+            if (approval.ResultMessage is not null)
+            {
+                Messages.Add(approval.ResultMessage);
+            }
+            else
+            {
+                // Insert a placeholder tool result.
+                Messages.Add(new ChatMessage
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ConversationId = ConversationId ?? string.Empty,
+                    Role = "tool",
+                    Content = $"Tool '{approval.ToolCall.Name}' executed.",
+                    ToolCallId = approval.ToolCall.Id,
+                });
+            }
+        }
+        else if (approval.Status == "denied")
+        {
+            Messages.Add(new ChatMessage
+            {
+                Id = Guid.NewGuid().ToString(),
+                ConversationId = ConversationId ?? string.Empty,
+                Role = "tool",
+                Content = $"Tool '{approval.ToolCall.Name}' was denied by the user.",
+                ToolCallId = approval.ToolCall.Id,
+            });
+        }
+
+        // Remove from pending.
+        PendingApprovals.Remove(approval);
+
+        await Task.CompletedTask;
     }
 
     // * method: can_send
