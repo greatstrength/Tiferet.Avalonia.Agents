@@ -1,0 +1,17 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Tiferet.Avalonia.Agents.Assets.Controls">
+
+  <Style Selector="controls|StreamingTextBlock">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <TextBlock Name="PART_TextBlock"
+                   Text="{TemplateBinding Text}"
+                   TextWrapping="Wrap"
+                   FontSize="14"
+                   Foreground="#212121" />
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+</Styles>
