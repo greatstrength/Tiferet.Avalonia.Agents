@@ -1,0 +1,11 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Agent control themes — include this single file to load all agent styles -->
+  <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/ChatBubble.axaml" />
+  <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/MessageInput.axaml" />
+  <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/StreamingTextBlock.axaml" />
+  <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/ToolCallCard.axaml" />
+  <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/MarkdownBlock.axaml" />
+
+</Styles>
