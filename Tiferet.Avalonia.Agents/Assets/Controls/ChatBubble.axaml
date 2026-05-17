@@ -1,0 +1,77 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Tiferet.Avalonia.Agents.Assets.Controls">
+
+  <!-- ChatBubble default template -->
+  <Style Selector="controls|ChatBubble">
+    <Setter Property="Margin" Value="8,4" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="MaxWidth" Value="600" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border CornerRadius="12"
+                Padding="12,8"
+                Background="#E8EAF6"
+                Name="BubbleBorder">
+          <StackPanel Spacing="4">
+            <TextBlock Text="{TemplateBinding Content}"
+                       TextWrapping="Wrap"
+                       FontSize="14"
+                       Foreground="#212121" />
+            <TextBlock Text="{TemplateBinding Timestamp}"
+                       FontSize="10"
+                       Foreground="#9E9E9E"
+                       HorizontalAlignment="Right" />
+          </StackPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <!-- Human: right-aligned, accent -->
+  <Style Selector="controls|ChatBubble:human">
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Style Selector="^ /template/ Border#BubbleBorder">
+      <Setter Property="Background" Value="#C5CAE9" />
+    </Style>
+  </Style>
+
+  <!-- AI: left-aligned, light -->
+  <Style Selector="controls|ChatBubble:ai">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Style Selector="^ /template/ Border#BubbleBorder">
+      <Setter Property="Background" Value="#F5F5F5" />
+    </Style>
+  </Style>
+
+  <!-- Tool: left-aligned, monospaced -->
+  <Style Selector="controls|ChatBubble:tool">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Style Selector="^ /template/ Border#BubbleBorder">
+      <Setter Property="Background" Value="#ECEFF1" />
+    </Style>
+    <Style Selector="^ /template/ TextBlock">
+      <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, monospace" />
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+  </Style>
+
+  <!-- System: centered, subtle -->
+  <Style Selector="controls|ChatBubble:system">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Opacity" Value="0.7" />
+    <Style Selector="^ /template/ Border#BubbleBorder">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="^ /template/ TextBlock">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="FontStyle" Value="Italic" />
+    </Style>
+  </Style>
+
+  <!-- Streaming state -->
+  <Style Selector="controls|ChatBubble:streaming /template/ Border#BubbleBorder">
+    <Setter Property="Opacity" Value="0.85" />
+  </Style>
+
+</Styles>

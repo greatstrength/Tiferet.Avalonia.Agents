@@ -1,0 +1,34 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Tiferet.Avalonia.Agents.Assets.Controls">
+
+  <Style Selector="controls|MessageInput">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="#FAFAFA"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,1,0,0"
+                Padding="12,8">
+          <DockPanel>
+            <Button Name="PART_SendButton"
+                    DockPanel.Dock="Right"
+                    Content="Send"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Bottom"
+                    Padding="16,8"
+                    IsEnabled="{TemplateBinding IsInputEnabled}" />
+            <TextBox Name="PART_TextBox"
+                     Text="{TemplateBinding Text, Mode=TwoWay}"
+                     Watermark="{TemplateBinding Placeholder}"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     MaxHeight="120"
+                     MinHeight="36"
+                     IsEnabled="{TemplateBinding IsInputEnabled}" />
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+</Styles>

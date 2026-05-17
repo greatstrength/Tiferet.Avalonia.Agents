@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctx="using:Tiferet.Avalonia.Agents.Contexts"
+             xmlns:domain="using:Tiferet.Avalonia.Agents.Domain"
+             xmlns:controls="using:Tiferet.Avalonia.Agents.Assets.Controls"
+             x:Class="Tiferet.Avalonia.Agents.Views.ChatView"
+             x:DataType="ctx:ChatViewModel">
+
+  <UserControl.Styles>
+    <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/ChatBubble.axaml" />
+    <StyleInclude Source="avares://Tiferet.Avalonia.Agents/Assets/Controls/MessageInput.axaml" />
+  </UserControl.Styles>
+
+  <DockPanel>
+    <!-- Header -->
+    <Border DockPanel.Dock="Top"
+            Background="#FAFAFA"
+            BorderBrush="#E0E0E0"
+            BorderThickness="0,0,0,1"
+            Padding="16,12">
+      <TextBlock Text="{Binding AgentName}"
+                 FontSize="16"
+                 FontWeight="SemiBold" />
+    </Border>
+
+    <!-- Message input (bottom-docked) -->
+    <controls:MessageInput DockPanel.Dock="Bottom"
+                           Text="{Binding CurrentInput, Mode=TwoWay}"
+                           SendCommand="{Binding SendMessageCommand}"
+                           IsInputEnabled="{Binding !IsSending}" />
+
+    <!-- Message list -->
+    <ScrollViewer Name="MessageScrollViewer"
+                  VerticalScrollBarVisibility="Auto"
+                  Padding="8">
+      <ItemsControl ItemsSource="{Binding Messages}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="domain:ChatMessage">
+            <controls:ChatBubble Role="{Binding Role}"
+                                 Content="{Binding Content}"
+                                 IsStreaming="{Binding IsStreaming}" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </DockPanel>
+
+</UserControl>
