@@ -14,10 +14,7 @@
                 Background="#E8EAF6"
                 Name="BubbleBorder">
           <StackPanel Spacing="4">
-            <TextBlock Text="{TemplateBinding Content}"
-                       TextWrapping="Wrap"
-                       FontSize="14"
-                       Foreground="#212121" />
+            <controls:MarkdownBlock Text="{TemplateBinding Content}" />
             <TextBlock Text="{TemplateBinding Timestamp}"
                        FontSize="10"
                        Foreground="#9E9E9E"

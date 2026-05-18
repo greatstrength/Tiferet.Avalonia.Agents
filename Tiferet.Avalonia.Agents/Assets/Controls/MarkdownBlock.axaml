@@ -5,10 +5,7 @@
   <Style Selector="controls|MarkdownBlock">
     <Setter Property="Template">
       <ControlTemplate>
-        <SelectableTextBlock Text="{TemplateBinding Text}"
-                             TextWrapping="Wrap"
-                             FontSize="14"
-                             Foreground="#212121" />
+        <StackPanel Name="PART_ContentPanel" Spacing="4" />
       </ControlTemplate>
     </Setter>
   </Style>
