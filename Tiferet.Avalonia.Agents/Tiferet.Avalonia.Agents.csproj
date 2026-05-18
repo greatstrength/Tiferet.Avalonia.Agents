@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>Tiferet.Avalonia.Agents</PackageId>
-    <Version>1.0.0-beta.1</Version>
+<Version>1.0.0-beta.2</Version>
     <Authors>Great Strength Applications</Authors>
     <Description>Tiferet.Avalonia.Agents – an Avalonia UI extension for building agentic chat interfaces with streamed responses, inline tool approval, and conversation management.</Description>
     <PackageTags>tiferet;avalonia;agents;chat;llm;streaming;tool-approval</PackageTags>
