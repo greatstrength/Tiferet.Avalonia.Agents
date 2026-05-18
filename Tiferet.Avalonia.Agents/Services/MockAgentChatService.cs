@@ -102,6 +102,9 @@ public class MockAgentChatService : IAgentChatService
         if (lower.Contains("calculator") || lower.Contains("calc"))
             return "I can help with calculations! The calculator supports addition, subtraction, multiplication, division, and exponentiation. What would you like to compute?";
 
+        if (lower.Contains("code") || lower.Contains("example") || lower.Contains("snippet"))
+            return "Here's an example of a Tiferet domain event:\n\n```python\nfrom tiferet.events import DomainEvent\n\nclass AddNumber(DomainEvent):\n    def execute(self, a, b, **kwargs):\n        return a + b\n```\n\nThis event adds two numbers and returns the result.";
+
         if (lower.Contains("tool"))
             return "I have access to several tools that can help with your request. Would you like me to use one? I'll ask for your approval before executing any tool.";
 

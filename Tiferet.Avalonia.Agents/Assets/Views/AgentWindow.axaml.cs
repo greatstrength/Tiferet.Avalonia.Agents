@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Tiferet.Avalonia.Agents.Contexts;
 using Tiferet.Avalonia.Agents.Domain;
 using Tiferet.Avalonia.Agents.Interfaces;
@@ -51,6 +52,33 @@ public partial class AgentWindow : Window
 
         // Load initial data when the window opens.
         Opened += OnWindowOpened;
+
+        // Register global keyboard shortcuts.
+        KeyDown += OnWindowKeyDown;
+    }
+
+    // * method: on_window_key_down
+    /// <summary>
+    /// Handle global keyboard shortcuts.
+    /// Ctrl+N creates a new conversation. Escape deselects the current conversation.
+    /// </summary>
+    private void OnWindowKeyDown(object? sender, KeyEventArgs e)
+    {
+        // Ctrl+N: New conversation.
+        if (e.KeyModifiers.HasFlag(KeyModifiers.Control) && e.Key == Key.N)
+        {
+            e.Handled = true;
+            _conversationListViewModel.NewConversationCommand.Execute(null);
+            return;
+        }
+
+        // Escape: Deselect conversation and clear chat.
+        if (e.Key == Key.Escape)
+        {
+            e.Handled = true;
+            _conversationListViewModel.SelectedConversation = null;
+            return;
+        }
     }
 
     // * method: on_window_opened

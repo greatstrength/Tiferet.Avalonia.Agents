@@ -1,5 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Tiferet.Avalonia.Agents.Domain;
@@ -240,6 +243,76 @@ public partial class ChatViewModel : ViewModelBase
         AgentId = null;
         AgentName = "Agent";
         CurrentInput = string.Empty;
+    }
+
+    // * method: generate_markdown_export
+    /// <summary>
+    /// Generate a Markdown-formatted export of the current conversation.
+    /// </summary>
+    /// <returns>The conversation formatted as Markdown.</returns>
+    public string GenerateMarkdownExport()
+    {
+        var sb = new StringBuilder();
+
+        // Header.
+        sb.AppendLine($"# {AgentName} Conversation");
+        sb.AppendLine();
+        sb.AppendLine($"> Exported: {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss UTC}");
+        if (!string.IsNullOrEmpty(ConversationId))
+            sb.AppendLine($"> Conversation ID: {ConversationId}");
+        sb.AppendLine();
+        sb.AppendLine("---");
+
+        // Messages.
+        foreach (var message in Messages)
+        {
+            sb.AppendLine();
+            var roleLabel = message.Role switch
+            {
+                "human" => "Human",
+                "ai" => AgentName,
+                "system" => "System",
+                "tool" => $"Tool ({message.ToolCallId ?? "unknown"})",
+                _ => message.Role,
+            };
+
+            sb.AppendLine($"### {roleLabel}");
+            sb.AppendLine();
+            sb.AppendLine(message.Content);
+            sb.AppendLine();
+            sb.AppendLine("---");
+        }
+
+        return sb.ToString();
+    }
+
+    // * method: generate_json_export
+    /// <summary>
+    /// Generate a JSON-formatted export of the current conversation.
+    /// </summary>
+    /// <returns>The conversation formatted as JSON.</returns>
+    public string GenerateJsonExport()
+    {
+        var export = new
+        {
+            conversationId = ConversationId ?? string.Empty,
+            agentName = AgentName,
+            exportedAt = DateTimeOffset.UtcNow.ToString("o"),
+            messages = Messages.Select(m => new
+            {
+                id = m.Id,
+                role = m.Role,
+                content = m.Content,
+                toolCallId = m.ToolCallId,
+                createdAt = m.CreatedAt,
+            }).ToArray(),
+        };
+
+        return JsonSerializer.Serialize(export, new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        });
     }
 
     // * method: load_design_time_messages

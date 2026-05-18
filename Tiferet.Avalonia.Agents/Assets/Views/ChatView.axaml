@@ -11,15 +11,31 @@
   </UserControl.Styles>
 
   <DockPanel>
-    <!-- Header -->
+    <!-- Header with export buttons -->
     <Border DockPanel.Dock="Top"
             Background="#FAFAFA"
             BorderBrush="#E0E0E0"
             BorderThickness="0,0,0,1"
             Padding="16,12">
-      <TextBlock Text="{Binding AgentName}"
-                 FontSize="16"
-                 FontWeight="SemiBold" />
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right"
+                    Orientation="Horizontal"
+                    Spacing="4"
+                    VerticalAlignment="Center">
+          <Button Name="CopyMarkdownButton"
+                  Content="Copy MD"
+                  FontSize="12"
+                  Padding="8,4" />
+          <Button Name="CopyJsonButton"
+                  Content="Copy JSON"
+                  FontSize="12"
+                  Padding="8,4" />
+        </StackPanel>
+        <TextBlock Text="{Binding AgentName}"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   VerticalAlignment="Center" />
+      </DockPanel>
     </Border>
 
     <!-- Message input (bottom-docked) -->

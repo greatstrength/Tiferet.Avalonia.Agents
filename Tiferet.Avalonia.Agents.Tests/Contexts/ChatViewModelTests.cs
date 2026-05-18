@@ -193,4 +193,71 @@ public class ChatViewModelTests
         Assert.NotNull(vm.ConversationId);
         Assert.Equal("Tiferet Assistant", vm.AgentName);
     }
+
+    // * method: generate_markdown_export_empty
+    [Fact]
+    public void GenerateMarkdownExport_Empty_ContainsHeader()
+    {
+        var vm = new ChatViewModel();
+
+        var md = vm.GenerateMarkdownExport();
+
+        Assert.Contains("# Agent Conversation", md);
+        Assert.Contains("Exported:", md);
+    }
+
+    // * method: generate_markdown_export_with_messages
+    [Fact]
+    public async Task GenerateMarkdownExport_WithMessages_ContainsRoles()
+    {
+        var vm = new ChatViewModel();
+        await vm.SendMessageCommand.ExecuteAsync("hello world");
+
+        var md = vm.GenerateMarkdownExport();
+
+        Assert.Contains("### Human", md);
+        Assert.Contains("hello world", md);
+        Assert.Contains("### Agent", md);
+    }
+
+    // * method: generate_json_export_empty
+    [Fact]
+    public void GenerateJsonExport_Empty_IsValidJson()
+    {
+        var vm = new ChatViewModel();
+
+        var json = vm.GenerateJsonExport();
+
+        Assert.Contains("\"agentName\": \"Agent\"", json);
+        Assert.Contains("\"messages\": []", json);
+    }
+
+    // * method: generate_json_export_with_messages
+    [Fact]
+    public async Task GenerateJsonExport_WithMessages_ContainsMessageData()
+    {
+        var vm = new ChatViewModel();
+        await vm.SendMessageCommand.ExecuteAsync("test export");
+
+        var json = vm.GenerateJsonExport();
+
+        Assert.Contains("\"role\": \"human\"", json);
+        Assert.Contains("test export", json);
+        Assert.Contains("\"role\": \"ai\"", json);
+    }
+
+    // * method: generate_markdown_export_uses_agent_name
+    [Fact]
+    public async Task GenerateMarkdownExport_UsesAgentName()
+    {
+        var vm = new ChatViewModel();
+        var conversation = CreateSampleConversation();
+        vm.LoadConversation(conversation, "Tiferet Bot");
+        await vm.SendMessageCommand.ExecuteAsync("hello");
+
+        var md = vm.GenerateMarkdownExport();
+
+        Assert.Contains("# Tiferet Bot Conversation", md);
+        Assert.Contains("### Tiferet Bot", md);
+    }
 }
